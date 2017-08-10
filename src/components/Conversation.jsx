@@ -29,7 +29,7 @@ export default class Conversation extends React.Component {
 		})
 
 		return (
-			<Container fluid style={{overflowY: 'scroll', h}}>
+			<Container fluid style={{overflowY: 'scroll'}}>
 				{qaList}
 			</Container>
 		)
