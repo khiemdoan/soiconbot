@@ -1,37 +1,56 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { Container } from 'semantic-ui-react'
 import QuestionAnswer from './QuestionAnswer'
 
 export default class Conversation extends React.Component {
 
-	render() {
-		let messages = this.props.messages
-		let qaList = []
+  constructor(props) {
+    super(props)
+  }
 
-		for (let i = 0; i < messages.length; i += 2) {
-			qaList.push({
-				userMessage: messages[i].message,
-				botMessage: messages[i + 1].message,
-				canSendReport: messages[i].canSendReport && messages[i + 1].canSendReport
-			})
-		}
+  componentDidUpdate(prevProps, prevState) {
+    const node = ReactDOM.findDOMNode(this.this)
+    console.log(node)
+    // node.scrollIntoView({ behavior: "smooth" });
+  }
 
-		qaList = qaList.map((qa, key) => {
-			return (
-				<QuestionAnswer
-					key={key}
-					username={this.props.username}
-					userMessage={qa.userMessage}
-					botMessage={qa.botMessage}
-					disableReport={!qa.canSendReport}
-					report={this.props.report} />
-			)
-		})
+  render() {
+    let messages = this.props.messages
+    let qaList = []
 
-		return (
-			<Container fluid style={{overflowY: 'scroll'}}>
-				{qaList}
-			</Container>
-		)
-	}
+    for (let i = 0; i < messages.length; i += 2) {
+      qaList.push({
+        userMessage: messages[i].message,
+        botMessage: messages[i + 1].message,
+        canSendReport: messages[i].canSendReport && messages[i + 1].canSendReport
+      })
+    }
+
+    qaList = qaList.map((qa, key) => {
+      return (
+        <QuestionAnswer
+          key={key}
+          username={this.props.username}
+          userMessage={qa.userMessage}
+          botMessage={qa.botMessage}
+          disableReport={!qa.canSendReport}
+          report={this.props.report} />
+      )
+    })
+
+    let style = {
+      overflowX: 'hidden',
+      overflowY: 'scroll',
+      height: '450px',
+      position: 'relative',
+      margin: '20px',
+    }
+
+    return (
+      <Container fluid style={style}>
+        {qaList}
+      </Container>
+    )
+  }
 }
