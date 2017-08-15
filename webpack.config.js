@@ -54,9 +54,11 @@ let config = {
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),
 		new HtmlWebpackPlugin({
-			template: __dirname + '/src/index.html',
+      template: __dirname + '/src/index.html',
 			filename: 'index.html',
-			inject: 'body'
+      inject: 'body',
+      title: 'SoiCon bot',
+      favicon: 'src/favicon.ico'
 		}),
 		new ExtractTextPlugin('styles.css'),
 	]

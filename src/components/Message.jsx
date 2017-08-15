@@ -15,15 +15,25 @@ export default class Message extends React.Component {
       margin: 5,
       padding: 10,
     }
-    return (
-      <Grid>
-        <Grid.Row>
+
+    let mesage = this.props.message.trim()
+
+    let messages = mesage.split('\n')
+    messages = messages.map((value, index) => {
+      return (
+        <Grid.Row key={index}>
           <Grid.Column>
             <Segment inverted color={color} floated={float} textAlign={align} size='mini'>
-              {this.props.message}
+              {value}
             </Segment>
           </Grid.Column>
         </Grid.Row>
+      )
+    })
+
+    return (
+      <Grid columns={1}>
+        {messages}
       </Grid>
     )
   }

@@ -10,9 +10,8 @@ export default class Conversation extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const node = ReactDOM.findDOMNode(this.this)
-    console.log(node)
-    // node.scrollIntoView({ behavior: "smooth" });
+    let div = this.refs.box
+    div.scrollTop = div.scrollHeight
   }
 
   render() {
@@ -44,13 +43,13 @@ export default class Conversation extends React.Component {
       overflowY: 'scroll',
       height: '450px',
       position: 'relative',
-      margin: '20px',
+      margin: '20px 0px',
     }
 
     return (
-      <Container fluid style={style}>
+      <div style={style} ref='box'>
         {qaList}
-      </Container>
+      </div>
     )
   }
 }
