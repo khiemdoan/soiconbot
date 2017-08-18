@@ -57,7 +57,6 @@ let config = {
       template: __dirname + '/src/index.html',
 			filename: 'index.html',
       inject: 'body',
-      title: 'SoiCon bot',
       favicon: 'src/favicon.ico'
 		}),
 		new ExtractTextPlugin('styles.css'),

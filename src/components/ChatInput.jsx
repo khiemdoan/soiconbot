@@ -8,6 +8,7 @@ export default class ChatInput extends React.Component {
     this.state = { content: '' }
     this.onChange = this.onChange.bind(this)
     this.onKeyUp = this.onKeyUp.bind(this)
+    this.onClick = this.onClick.bind(this)
   }
 
   onChange(event, data) {
@@ -21,17 +22,34 @@ export default class ChatInput extends React.Component {
     }
   }
 
+  onClick(event, data) {
+    if (this.state.content.length > 0) {
+      this.props.sendMessage(this.state.content)
+      this.setState({ content: '' })
+    }
+  }
+
   render() {
     return (
       <Form>
-        <Form.Field>
-          <label>Chat with me:</label>
-          <TextArea
-            label='Chat with me...'
-            value={this.state.content}
-            onChange={this.onChange}
-            onKeyUp={this.onKeyUp} />
-        </Form.Field>
+        <label>Chat with me:</label>
+        <Form.Group>
+          <Form.Field width={13}>
+            <TextArea
+              label='Chat with me...'
+              value={this.state.content}
+              onChange={this.onChange}
+              onKeyUp={this.onKeyUp} />
+          </Form.Field>
+          <Form.Field width={3}>
+            <Button
+              onClick={this.onClick}
+              style={{ width: '100%', height: '100%' }}
+              color='green'>
+              Send
+            </Button>
+          </Form.Field>
+        </Form.Group>
       </Form>
     )
   }
