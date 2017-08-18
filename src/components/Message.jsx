@@ -16,14 +16,15 @@ export default class Message extends React.Component {
       padding: 10,
     }
 
-    let mesage = this.props.message.trim()
-
+    let mesage = this.props.message
     let messages = mesage.split('\n')
+    messages = messages.map(message => { return message.trim() })
+    messages = messages.filter(message => { return message.length > 0 })
     messages = messages.map((value, index) => {
       return (
-        <Grid.Row key={index}>
+        <Grid.Row key={index} style={{ padding: "1px 0px" }}>
           <Grid.Column>
-            <Segment inverted color={color} floated={float} textAlign={align} size='mini'>
+            <Segment inverted color={color} floated={float} textAlign={align} size='mini' style={{ padding: "5px" }}>
               {value}
             </Segment>
           </Grid.Column>
