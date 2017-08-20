@@ -4,7 +4,7 @@ import Login from '../components/Login'
 import ChatInput from '../components/ChatInput'
 import Conversation from '../components/Conversation'
 
-const host = 'http://35.186.152.205:3010'
+const host = 'http://35.186.152.205'
 
 export default class Home extends React.Component {
 
@@ -15,48 +15,56 @@ export default class Home extends React.Component {
       logined: false,
       messages: [],
     }
-    this.login = this.login.bind(this)
+    this.loadData = this.loadData.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
     this.report = this.report.bind(this)
+    this.logout = this.logout.bind(this)
   }
 
-  login(username) {
+  componentDidMount() {
+    this.loadData('')
+  }
+
+  loadData(username) {
     const self = this
-    let loadData = false
-    let request = new Request(`${host}/check_user?username=${username}`)
+
+    let request = new Request(`${host}/loaddata`, {
+      method: 'post',
+      credentials: 'include',
+      body: JSON.stringify({
+        username: username,
+      })
+    })
     fetch(request).then(response => {
-      return response.text()
-    }).then(status => {
-      if (status === 'false') {
-        return fetch(`${host}/create_user?username=${username}`)
-      } else if (status === 'true') {
-        loadData = true
-        return fetch(`${host}/load_data?username=${username}`)
-      }
-    }).then(response => {
-      if (loadData) {
-        return response.json()
-      } else {
-        return response.text()
-      }
+      return response.json()
     }).then(data => {
-      if (loadData) {
-        let messages = data.chatData
-        messages = messages.map(message => {
-          message.canSendReport = false
-          return message
-        })
-        self.setState({ messages: messages })
-      } else {
-        self.setState({ message: [] })
-        console.log(data)
+      let logined = false
+      if (data.errorCode === 1) {
+        logined = true
       }
+      self.setState({
+        username: data.username,
+        messages: data.messages,
+        logined: logined
+      })
     }).catch(err => {
       console.log(err)
       alert('Không kết nối được tới máy chủ!')
     })
+  }
 
-    this.setState({ username: username })
+  logout() {
+    let request = new Request(`${host}/logout`, {
+      credentials: 'include',
+    })
+    fetch(request).then(response => {
+      return reponse.text()
+    }).catch(err => console.log(err))
+    this.setState({
+      username: '',
+      messages: [],
+      logined: false
+    })
   }
 
   sendMessage(message) {
@@ -66,13 +74,20 @@ export default class Home extends React.Component {
     }
 
     const self = this
-    let request = new Request(`${host}/chat?username=${this.state.username}&message=${message}`)
+
+    let request = new Request(`${host}/chat`, {
+      method: 'post',
+      credentials: 'include',
+      body: JSON.stringify({
+        message: message,
+      })
+    })
     fetch(request).then(response => {
-      return response.text()
+      return response.json()
     }).then(botMessage => {
       let messages = this.state.messages
-      messages.push({ isUser: true, message: message, canSendReport: true })
-      messages.push({ isUser: false, message: botMessage, canSendReport: true })
+      messages.push({ bUser: true, message: message })
+      messages.push({ bUser: false, message: botMessage.message })
       this.setState({ messages: messages })
     }).catch(err => alert('Không kết nối được tới máy chủ!'))
   }
@@ -80,10 +95,10 @@ export default class Home extends React.Component {
   report(userMessage, botMessage) {
     let request = new Request(`${host}/report`, {
       method: 'post',
+      credentials: 'include',
       body: JSON.stringify({
-        username: this.state.username,
-        messageuser: userMessage,
-        messagebot: botMessage,
+        userMessage: userMessage,
+        botMessage: botMessage,
       })
     })
     fetch(request).then(response => {
@@ -100,7 +115,11 @@ export default class Home extends React.Component {
     return (
       <Container text style={{ height: '100%', position: 'relative' }}>
         <Header as='h1'>SoiCon bot</Header>
-        <Login login={this.login} disabled={this.state.logined} />
+        <Login
+          username={this.state.username}
+          loadData={this.loadData}
+          logout={this.logout}
+          logined={this.state.logined} />
         <Conversation messages={this.state.messages} report={this.report} username={this.state.username} />
         <ChatInput sendMessage={this.sendMessage} />
       </Container>

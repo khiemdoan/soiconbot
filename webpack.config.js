@@ -10,7 +10,7 @@ const debug = process.env.NODE_ENV !== "production";
 let config = {
 	entry: './src/index.jsx',
 	output: {
-		path: path.resolve('docs'),
+		path: path.resolve('build'),
 		filename: 'bundle.js',
 	},
 

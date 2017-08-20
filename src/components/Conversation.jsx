@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Container } from 'semantic-ui-react'
 import QuestionAnswer from './QuestionAnswer'
 
 export default class Conversation extends React.Component {
@@ -19,10 +18,13 @@ export default class Conversation extends React.Component {
     let qaList = []
 
     for (let i = 0; i < messages.length; i += 2) {
+      if (!messages[i].bUser || messages[i + 1].bUser) {
+        i--;
+        continue;
+      }
       qaList.push({
         userMessage: messages[i].message,
         botMessage: messages[i + 1].message,
-        canSendReport: messages[i].canSendReport && messages[i + 1].canSendReport
       })
     }
 
@@ -33,7 +35,6 @@ export default class Conversation extends React.Component {
           username={this.props.username}
           userMessage={qa.userMessage}
           botMessage={qa.botMessage}
-          disableReport={!qa.canSendReport}
           report={this.props.report} />
       )
     })
@@ -43,11 +44,13 @@ export default class Conversation extends React.Component {
       overflowY: 'scroll',
       height: '450px',
       position: 'relative',
-      margin: '20px 0px',
+      margin: '20px 0px 0px 0px',
+      borderStyle: 'solid',
+      borderWidth: '2px',
     }
 
     return (
-      <div style={style} ref='box'>
+      <div className='ui container' style={style} ref='box'>
         {qaList}
       </div>
     )
