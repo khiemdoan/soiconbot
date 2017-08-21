@@ -9,6 +9,10 @@ export default class Login extends React.Component {
     this.onClick = this.onClick.bind(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ username: nextProps.username })
+  }
+
   onChange(event) {
     this.setState({ username: event.target.value })
   }
@@ -28,12 +32,11 @@ export default class Login extends React.Component {
   render() {
     let buttonContent = this.props.logined ? 'Logout' : 'Login'
     return (
-
       <Form>
         <Form.Group style={{ margin: '0' }}>
           <Form.Field width={13}>
             <Input disabled={this.props.logined} fluid size='large' placeholder='Tên của bạn' style={{ width: '100%', height: '100%' }}>
-              <input onChange={e => this.onChange(e)} value={this.props.username} />
+              <input onChange={e => this.onChange(e)} value={this.state.username} />
             </Input>
           </Form.Field>
           <Form.Field width={3}>
@@ -46,8 +49,6 @@ export default class Login extends React.Component {
           </Form.Field>
         </Form.Group>
       </Form>
-
-
     )
   }
 }

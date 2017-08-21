@@ -45,7 +45,7 @@ export default class Conversation extends React.Component {
       height: '450px',
       position: 'relative',
       margin: '20px 0px 0px 0px',
-      borderStyle: 'solid',
+      borderStyle: 'dotted',
       borderWidth: '2px',
     }
 

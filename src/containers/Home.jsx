@@ -4,7 +4,8 @@ import Login from '../components/Login'
 import ChatInput from '../components/ChatInput'
 import Conversation from '../components/Conversation'
 
-const host = 'http://35.186.152.205'
+// const host = 'http://35.186.152.205'
+const host = ''
 
 export default class Home extends React.Component {
 
